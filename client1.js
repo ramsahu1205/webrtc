@@ -39,6 +39,7 @@ function initConnection(){
 }
 
 socket.on("remotecandidate",function(candidate){
+    debugger;
     yourConn.addIceCandidate(new RTCIceCandidate(candidate)); 
 })
 
@@ -52,6 +53,7 @@ callBtn.addEventListener("click", function () {
  });
 
  socket.on("reciveOffer",function(offer){
+     debugger;
     yourConn.setRemoteDescription(new RTCSessionDescription(offer));
     yourConn.createAnswer(function (answer) { 
     yourConn.setLocalDescription(answer); 
