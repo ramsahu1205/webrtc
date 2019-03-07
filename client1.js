@@ -14,6 +14,7 @@ function initConnection(){
         "iceServers": [{ "url": "stun:stun2.1.google.com:19302" }]
      }; 
      yourConn = new webkitRTCPeerConnection(configuration); 
+
       navigator.webkitGetUserMedia({ video: true, audio: true }, function (myStream) { 
       stream = myStream; 
 	  localVideo.srcObject=stream;	
@@ -39,7 +40,6 @@ function initConnection(){
 }
 
 socket.on("remotecandidate",function(candidate){
-    debugger;
     yourConn.addIceCandidate(new RTCIceCandidate(candidate)); 
 })
 
@@ -53,7 +53,6 @@ callBtn.addEventListener("click", function () {
  });
 
  socket.on("reciveOffer",function(offer){
-     debugger;
     yourConn.setRemoteDescription(new RTCSessionDescription(offer));
     yourConn.createAnswer(function (answer) { 
     yourConn.setLocalDescription(answer); 
@@ -70,6 +69,5 @@ callBtn.addEventListener("click", function () {
  });
 
  socket.on("reciveAnswer",function(answer){
-     debugger;
     yourConn.setRemoteDescription(new RTCSessionDescription(answer)); 
  })

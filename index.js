@@ -14,17 +14,17 @@ server.listen(PORT);
 var users = {};
 io.on("connection",function(socket){
   
-  console.log("socket is connected");
+  console.log(socket);
   socket.on("candidate",function(candidate){
-    console.log("candidate")
+  //  console.log("candidate")
      socket.broadcast.emit("remotecandidate",candidate);
   })
   socket.on("sendOffer",function(offer){
-    console.log("offer");
+    //console.log("offer");
     socket.broadcast.emit("reciveOffer",offer);
   })
   socket.on("sendAnswer",function(answer){
-    console.log("answere");
+   // console.log("answere");
     socket.broadcast.emit("reciveAnswer",answer);
   })
 	
