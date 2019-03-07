@@ -70,5 +70,6 @@ callBtn.addEventListener("click", function () {
  });
 
  socket.on("reciveAnswer",function(answer){
+     debugger;
     yourConn.setRemoteDescription(new RTCSessionDescription(answer)); 
  })
