@@ -1,0 +1,36 @@
+<html>
+    <head>
+     <link rel="stylesheet" href="client2.css"/>
+    </head>
+    <body>
+        <div id="container">
+            <div style="display: flex">
+            <video id="localVideo" playsinline autoplay muted></video>
+            <video id="remoteVideo" playsinline autoplay></video>
+        </div>
+            <div class="box">
+                <button id="startButton">Start</button>
+                <button id="callButton">Call</button>
+                <button id="hangupButton">Hang Up</button>
+            </div>
+        
+            <div class="box">
+                <span>SDP Semantics:</span>
+                <select id="sdpSemantics">
+                    <option selected value="">Default</option>
+                    <option value="unified-plan">Unified Plan</option>
+                    <option value="plan-b">Plan B</option>
+                </select>
+            </div>
+            <script src="/socket.io/socket.io.js"></script> 
+            <script >
+            var socket=io();
+            // socket.emit("msg","ram");
+            // socket.on("rep_msg",function(msg){
+            //    console.log(msg);
+            // })
+         
+            </script>
+            <script src="client2.js"></script>
+    </body>
+</html>

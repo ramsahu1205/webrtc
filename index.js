@@ -14,9 +14,9 @@ server.listen(PORT);
 var users = {};
 io.on("connection",function(socket){
   
-  console.log(socket);
+ // console.log(socket);
   socket.on("candidate",function(candidate){
-  //  console.log("candidate")
+    console.log("candidate")
      socket.broadcast.emit("remotecandidate",candidate);
   })
   socket.on("sendOffer",function(offer){

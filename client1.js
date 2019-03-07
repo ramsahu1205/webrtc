@@ -1,73 +1,144 @@
 
 
-var callBtn = document.querySelector('#callBtn'); 
+var callBtn = document.querySelector('#callBtn');
 var hangUpBtn = document.querySelector('#hangUpBtn');
-var localVideo = document.querySelector('#localVideo'); 
+var localVideo = document.querySelector('#localVideo');
 var remoteVideo = document.querySelector('#remoteVideo');
 
-var yourConn; 
+var yourConn;
 var stream;
 initConnection()
-function initConnection(){
+function initConnection() {
 
-    var configuration = { 
-        "iceServers": [{ "url": "stun:stun2.1.google.com:19302" }]
-     }; 
-     yourConn = new RTCPeerConnection({}); 
+    var configuration = {
+        'iceServers':
+            [
+                { url: 'stun:stun.1.google.com:19302' },
+                { url: 'turn:numb.viagenie.ca', credential: 'muazkh', username: 'webrtc@live.com' },
+                { url: 'stun:stun01.sipphone.com' },
 
-      navigator.webkitGetUserMedia({ video: true, audio: true }, function (myStream) { 
-      stream = myStream; 
-	  localVideo.srcObject=stream;	
-      yourConn.addStream(stream); 
-      yourConn.onaddstream = function (e) { 
-           // remoteVideo.src = window.URL.createObjectURL(e.stream); 
-           remoteVideo.srcObject=e.stream;
-      };
-      yourConn.onicecandidate = function (event) { 
-            if (event.candidate) { 
-                socket.emit("candidate",event.candidate);
-            //    send({ 
-            //       type: "candidate", 
-            //       candidate: event.candidate 
-            //    }); 
-            } 
-        };  
-			
-      }, function (error) { 
-         console.log(error); 
-      }); 
-	
+                { url: 'stun:stun.ekiga.net' },
+
+                { url: 'stun:stun.fwdnet.net' },
+
+                { url: 'stun:stun.ideasip.com' },
+
+                { url: 'stun:stun.iptel.org' },
+
+                { url: 'stun:stun.rixtelecom.se' },
+
+                { url: 'stun:stun.schlund.de' },
+
+                { url: 'stun:stun.l.google.com:19302' },
+
+                { url: 'stun:stun1.l.google.com:19302' },
+
+                { url: 'stun:stun2.l.google.com:19302' },
+
+                { url: 'stun:stun3.l.google.com:19302' },
+
+                { url: 'stun:stun4.l.google.com:19302' },
+
+                { url: 'stun:stunserver.org' },
+
+                { url: 'stun:stun.softjoys.com' },
+
+                { url: 'stun:stun.voiparound.com' },
+
+                { url: 'stun:stun.voipbuster.com' },
+
+                { url: 'stun:stun.voipstunt.com' },
+
+                { url: 'stun:stun.voxgratia.org' },
+
+                { url: 'stun:stun.xten.com' },
+
+                {
+
+                    url: 'turn:numb.viagenie.ca',
+
+                    credential: 'muazkh',
+
+                    username: 'webrtc@live.com'
+
+                },
+
+                {
+
+                    url: 'turn:192.158.29.39:3478?transport=udp',
+
+                    credential: 'JZEOEt2V3Qb0y27GRntt2u2PAYA=',
+
+                    username: '28224511:1379330808'
+
+                },
+
+                {
+
+                    url: 'turn:192.158.29.39:3478?transport=tcp',
+
+                    credential: 'JZEOEt2V3Qb0y27GRntt2u2PAYA=',
+
+                    username: '28224511:1379330808'
+
+                }
+            ]
+    };
+    yourConn = new webkitRTCPeerConnection(configuration);
+
+    navigator.webkitGetUserMedia({ video: true, audio: true }, function (myStream) {
+        stream = myStream;
+        localVideo.srcObject = stream;
+        yourConn.addStream(stream);
+        yourConn.onaddstream = function (e) {
+            // remoteVideo.src = window.URL.createObjectURL(e.stream); 
+            remoteVideo.srcObject = e.stream;
+        };
+        yourConn.onicecandidate = function (event) {
+            if (event.candidate) {
+                socket.emit("candidate", event.candidate);
+                //    send({ 
+                //       type: "candidate", 
+                //       candidate: event.candidate 
+                //    }); 
+            }
+        };
+
+    }, function (error) {
+        console.log(error);
+    });
+
 }
 
-socket.on("remotecandidate",function(candidate){
-    yourConn.addIceCandidate(new RTCIceCandidate(candidate)); 
+socket.on("remotecandidate", function (candidate) {
+    yourConn.addIceCandidate(new RTCIceCandidate(candidate));
 })
 
-callBtn.addEventListener("click", function () { 
-       yourConn.createOffer(function (offer) { 
-           socket.emit("sendOffer",offer);
-          yourConn.setLocalDescription(offer); 
-       }, function (error) { 
-          alert("Error when creating an offer"); 
-       });
- });
+callBtn.addEventListener("click", function () {
+    yourConn.createOffer(function (offer) {
+        socket.emit("sendOffer", offer);
+        yourConn.setLocalDescription(offer);
+    }, function (error) {
+        alert("Error when creating an offer");
+    });
+});
 
- socket.on("reciveOffer",function(offer){
+socket.on("reciveOffer", function (offer) {
     yourConn.setRemoteDescription(new RTCSessionDescription(offer));
-    yourConn.createAnswer(function (answer) { 
-    yourConn.setLocalDescription(answer); 
-         
-    //    send({ 
-    //       type: "answer", 
-    //       answer: answer 
-    //    }); 
-    socket.emit("sendAnswer",answer)
-         
-    }, function (error) { 
-       alert("Error when creating an answer"); 
-    }); 
- });
+    yourConn.createAnswer(function (answer) {
+        yourConn.setLocalDescription(answer);
 
- socket.on("reciveAnswer",function(answer){
-    yourConn.setRemoteDescription(new RTCSessionDescription(answer)); 
- })
+        //    send({ 
+        //       type: "answer", 
+        //       answer: answer 
+        //    }); 
+        socket.emit("sendAnswer", answer)
+
+    }, function (error) {
+        alert("Error when creating an answer");
+    });
+});
+
+socket.on("reciveAnswer", function (answer) {
+    yourConn.setRemoteDescription(new RTCSessionDescription(answer));
+})
