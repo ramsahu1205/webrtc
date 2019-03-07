@@ -13,7 +13,7 @@ function initConnection(){
     var configuration = { 
         "iceServers": [{ "url": "stun:stun2.1.google.com:19302" }]
      }; 
-     yourConn = new webkitRTCPeerConnection(configuration); 
+     yourConn = new webkitRTCPeerConnection({}); 
 
       navigator.webkitGetUserMedia({ video: true, audio: true }, function (myStream) { 
       stream = myStream; 
