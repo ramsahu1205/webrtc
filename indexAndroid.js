@@ -2,8 +2,6 @@ var WebSocketServer = require('websocket').server;
 var http = require('http');
 
 var clients = [ ];
-var offer;
-
 var server = http.createServer(function(request, response) {
   // process HTTP request. Since we're writing just WebSockets
   // server we don't have to implement anything.
@@ -22,11 +20,33 @@ wsServer.on('request', function(request) {
   var index = clients.push(connection) - 1;
   console.log('Index: ' + index)
   connection.on('message', function(message) {
-    var data=JSON.parse(message)
-    if(data.type=="candidate"){
-      console.log(message);
-      con[data["userId"]]=data;
+    var data=JSON.parse(message["utf8Data"]);
+    console.log(data);
+    if(data.type=="init"){
+      con[data["userId"]]=connection;
     }
+    if(data.type=="OFFER"){
+        var conn=con[data["userId"]];
+        if(conn)
+           conn.send(JSON.stringify(data));
+        else userId
+           connection.send(JSON.stringify({"type":"error",msg:"user not exist"}))    
+          }
+    if(data.type=="ANSWER"){
+      var conn=con[data["userId"]];
+      if(conn)
+         conn.send(JSON.stringify(data));				
+      else 
+         connection.send(JSON.stringify({"type":"error",msg:"user not exist"}))    
+        
+    }
+    if(data.type=="candidate"){
+      var conn=con[data["userId"]];
+      if(conn)
+         conn.send(JSON.stringify(data));
+      else 
+         connection.send(JSON.stringify({"type":"error",msg:"user not exist"}))    
+      }
   
   });
 
